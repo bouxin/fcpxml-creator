@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+
+<fcpxml version="1.9">
+    <resources>
+        <format id="r1" name="FFVideoFormat1080p30" frameDuration="100/3000s" width="1920" height="1080" colorSpace="1-1-1 (Rec. 709)"/>
+        <effect id="r2" name="Basic Title" uid=".../Titles.localized/Bumper:Opener.localized/Basic Title.localized/Basic Title.moti"/>
+    </resources>
+    <library location="file:///Users/bouxinLou/Movies/Basic.fcpbundle/">
+        <event name="A-Subtitle Getter" uid="9CB560A6-431A-49C8-9AE8-B86B09A30CAD">
+            <project name="demo" uid="55BAF987-432D-41C3-829E-FB4F69AFE13F" modDate="2021-06-15 16:28:10 +0800">
+                <sequence duration="100/3000s" format="r1" tcStart="0s" audioLayout="stereo" audioRate="48k">
+                    <spine>
+                        <gap>
+                            <title lane="1" ref="r2">
+                                <param name="Position" key="9999/999166631/999166633/1/100/101" value="0 -520"/>
+                                <param name="Flatten" key="9999/999166631/999166633/2/351" value="1"/>
+                                <param name="Alignment" key="9999/999166631/999166633/2/354/999169573/401" value="1 (Center)"/>
+                                <param name="Alignment" key="9999/999166631/999166633/2/373" value="0 (Left) 1 (Middle)"/>
+                                <param name="Size" key="9999/999166631/999166633/5/999166635/3" value="40"/>
+                                <text>
+                                    <text-style>demo value</text-style>
+                                </text>
+                                <text-style-def>
+									<text-style
+                                            font="Helvetica"
+                                            fontFace="Regular"
+                                            fontColor="1 0.999974 0.999991 1"
+                                            baseline="9"
+                                            kerning="2.615"
+                                            alignment="center"/>
+                                </text-style-def>
+                            </title>
+                        </gap>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>
