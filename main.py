@@ -15,6 +15,7 @@ if __name__ == '__main__':
     while True:
         capdir = input("请输入字幕文件目录：")
         filepath = base_dir + "/" + capdir + "/" + subtitle_file
+        print('字幕文件：%s' % filepath)
         tracks = CaptionsTracker(filepath).read().caption_source
         srt_source = SrcFormatBuilder(tracks).build()
         with open('./subtitles.srt', 'w', encoding='utf-8') as f:

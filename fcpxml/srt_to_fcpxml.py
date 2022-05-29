@@ -1,7 +1,6 @@
 """
 SRT & FCPXML CONVERTER
 REQUIREMENT: OpenCC (pip install opencc-python-reimplemented)
-AUTHOR: MICHAEL HONG
 """
 
 import xml.etree.ElementTree as ET
@@ -12,10 +11,14 @@ import argparse
 parser = argparse.ArgumentParser(description="Convert between .srt and .fcpxml files for subtitles creation.")
 parser.add_argument('-i', '--input', required=True, help="name for the input file (.srt or .fcpxml)")
 parser.add_argument('-o', '--output', required=True, help="name for the ouput file (.srt or .fcpxml)")
-parser.add_argument('-c', '--convert', help="(optional) to use OpenCC to convert between Simplified/Traditional Chinese. Please specify the OpenCC configurations (e.g., s2t, t2s)")
-parser.add_argument('-t', '--template', default='Template.xml', help="(optional) to use a user-specific template file to generate .fcpxml. Default to 'Template.xml'")
-parser.add_argument('-fr', '--framerate', default=29.97, type=float, help='(optional) framerate should be set in the template. This argument provides a sanity check. Default to 29.97fps')
-parser.add_argument('--offset', type=float, help='(optional) move the entire timeline forward/backward from input to output. In seconds')
+parser.add_argument('-c', '--convert',
+                    help="(optional) to use OpenCC to convert between Simplified/Traditional Chinese. Please specify the OpenCC configurations (e.g., s2t, t2s)")
+parser.add_argument('-t', '--template', default='Template.xml',
+                    help="(optional) to use a user-specific template file to generate .fcpxml. Default to 'Template.xml'")
+parser.add_argument('-fr', '--framerate', default=29.97, type=float,
+                    help='(optional) framerate should be set in the template. This argument provides a sanity check. Default to 29.97fps')
+parser.add_argument('--offset', type=float,
+                    help='(optional) move the entire timeline forward/backward from input to output. In seconds')
 args = parser.parse_args()
 
 FILE_IN = args.input
@@ -31,8 +34,7 @@ if args.convert:
 framerate_tuple = (1001, 30000)  # default to 29.97fps
 
 
-## TIME STAMP CONVERSION METHODS
-
+# TIME STAMP CONVERSION METHODS
 def convert_xml_t(s, return_tuple=False):
     # whole seconds
     if '/' not in s:
@@ -40,7 +42,7 @@ def convert_xml_t(s, return_tuple=False):
     components = s.split('/')
     x = float(components[0])
     y = float(components[1][:-1])
-    if return_tuple:  ## convert to int
+    if return_tuple:  # convert to int
         return (int(components[0]), int(components[1][:-1]))
     return (x / y)
 
@@ -49,7 +51,7 @@ def convert_t_xml(t):
     multiplier, denominator = framerate_tuple
     x = int(int(int(t * denominator) / multiplier)) * multiplier
     if x % denominator == 0:
-        return '%ds' % (x / denominator)  ## whole number
+        return '%ds' % (x / denominator)  # whole number
     return f'{x}/{denominator}s'
 
 
@@ -73,7 +75,7 @@ def convert_text(__str):
 
 
 ################
-# INPUT CONVERSTION METHODS
+# INPUT CONVERSION METHODS
 
 def process_input_srt():
     f = open(FILE_IN, 'r', encoding='utf-8-sig')
@@ -147,7 +149,6 @@ def process_output_fcpxml(data):
     if abs(args.framerate - xml_framerate_fps) > 0.005:
         raise Exception('template framerate %.2ffps is inconsistent with specified framerate %.2ffps.\
 		 Please set the correct framerate using flag -fr.' % (xml_framerate_fps, args.framerate))
-
     global framerate_tuple
     framerate_tuple = convert_xml_t(xml_framerate, return_tuple=True)
 
@@ -160,8 +161,8 @@ def process_output_fcpxml(data):
     n_sequence = n_project[0]
     n_spine = n_sequence[0]
 
-    title_proto = n_spine.find('title')  ## find the first title as template
-    n_spine.append(ET.Element('divider'))  ## add a divider between template and content
+    title_proto = n_spine.find('title')  # find the first title as template
+    n_spine.append(ET.Element('divider'))  # add a divider between template and content
 
     counter = 1
     for line in data:
@@ -211,7 +212,7 @@ def process_output_fcpxml(data):
 
 event_name = ''
 
-## convert input file to internal representation
+# convert input file to internal representation
 if FILE_IN.endswith('.srt'):
     data = process_input_srt()
     event_name = FILE_IN[:-4]
@@ -221,15 +222,14 @@ elif FILE_IN.endswith('.fcpxml'):
 else:
     raise Exception('unsupported input file type: ' + FILE_IN)
 
-## apply global offset (if applicable)
+# apply global offset (if applicable)
 if args.offset:
     data = list(map(lambda x: (x[0] + args.offset, x[1] + args.offset, x[2]), data))
 
-## convert internal representation to output
+# convert internal representation to output
 if FILE_OUT.endswith('.srt'):
     process_output_srt(data)
 elif FILE_OUT.endswith('.fcpxml'):
     process_output_fcpxml(data)
 else:
     raise Exception('unsupported output file type: ' + FILE_OUT)
-
