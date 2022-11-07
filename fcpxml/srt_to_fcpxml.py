@@ -11,14 +11,10 @@ import argparse
 parser = argparse.ArgumentParser(description="Convert between .srt and .fcpxml files for subtitles creation.")
 parser.add_argument('-i', '--input', required=True, help="name for the input file (.srt or .fcpxml)")
 parser.add_argument('-o', '--output', required=True, help="name for the ouput file (.srt or .fcpxml)")
-parser.add_argument('-c', '--convert',
-                    help="(optional) to use OpenCC to convert between Simplified/Traditional Chinese. Please specify the OpenCC configurations (e.g., s2t, t2s)")
-parser.add_argument('-t', '--template', default='Template.xml',
-                    help="(optional) to use a user-specific template file to generate .fcpxml. Default to 'Template.xml'")
-parser.add_argument('-fr', '--framerate', default=29.97, type=float,
-                    help='(optional) framerate should be set in the template. This argument provides a sanity check. Default to 29.97fps')
-parser.add_argument('--offset', type=float,
-                    help='(optional) move the entire timeline forward/backward from input to output. In seconds')
+parser.add_argument('-c', '--convert', help="(optional) to use OpenCC to convert between Simplified/Traditional Chinese. Please specify the OpenCC configurations (e.g., s2t, t2s)")
+parser.add_argument('-t', '--template', default='Template.xml', help="(optional) to use a user-specific template file to generate .fcpxml. Default to 'Template.xml'")
+parser.add_argument('-fr', '--framerate', default=29.97, type=float, help='(optional) framerate should be set in the template. This argument provides a sanity check. Default to 29.97fps')
+parser.add_argument('--offset', type=float, help='(optional) move the entire timeline forward/backward from input to output. In seconds')
 args = parser.parse_args()
 
 FILE_IN = args.input
@@ -28,7 +24,6 @@ XML_TEMPLATE = args.template
 cc = None
 if args.convert:
     from opencc import OpenCC
-
     cc = OpenCC(args.convert)
 
 framerate_tuple = (1001, 30000)  # default to 29.97fps

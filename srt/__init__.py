@@ -23,8 +23,7 @@ class SrcFormatBuilder(object):
         for i, t in enumerate(self.tracks):
             tracks_in_string.append(
                 '\n'.join([str(i + 1),
-                           us_to_string(t['start']) + ' --> ' +
-                           us_to_string(t['end']),
+                           us_to_string(t['start']) + ' --> ' + us_to_string(t['end']),
                            t['content']])
             )
 
